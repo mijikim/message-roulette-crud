@@ -28,19 +28,21 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  get "/messages/edit/:message" do
-    message_id = params[:message]
-    message_id[0] = ''
-    message_array = @database_connection.sql("select message from messages where id = #{message_id}")
+  get "/messages/edit/:id" do
+    message_array = @database_connection.sql("select message from messages where id = #{params[:id]}")
     message = message_array[0]["message"]
-    erb :edit, :locals => {:messages => message, :msg_id => message_id}
+    erb :edit, :locals => {:messages => message, :msg_id => params[:id]}
   end
 
-  patch "/messages/edit/:message" do
-    message_id = params[:message]
-    message_id[0] = ''
-    @database_connection.sql("update messages set message = '#{params[:message_edited]}' where id=#{message_id}")
-    redirect "/"
+  patch "/messages/edit/:id" do
+    if params[:message_edited].length <= 140
+      @database_connection.sql("update messages set message = '#{params[:message_edited]}' where id=#{params[:id]}")
+      redirect "/"
+    else
+      flash[:error] = "Message must be less than 140 characters."
+      redirect "/messages/edit/#{params[:id]}"
+    end
+
   end
 
 end

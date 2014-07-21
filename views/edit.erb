@@ -1,6 +1,6 @@
 Edit Message
 
-<form method="post" action="/messages/edit/:<%= msg_id %>">
+<form method="post" action="/messages/edit/<%= msg_id %>">
   <label for="message_edited">Message:</label>
   <input type="hidden" name="_method" value="patch" />
   <textarea type="text" col="40" row="5" id="message_edited" name="message_edited" placeholder="<%= messages %>"></textarea><br>
