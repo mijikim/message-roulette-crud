@@ -14,8 +14,9 @@ class App < Sinatra::Application
 
   get "/" do
     messages = @database_connection.sql("SELECT * FROM messages")
+    comments = @database_connection.sql("SELECT * FROM comments INNER JOIN messages ON comments.message_id = messages.id")
 
-    erb :home, locals: {messages: messages}
+    erb :home, locals: {messages: messages, comments: comments}
   end
 
   post "/messages" do
@@ -47,6 +48,11 @@ class App < Sinatra::Application
   delete "/messages/delete/:id" do
     @database_connection.sql("DELETE FROM messages where id = #{params[:id]}")
     redirect back
+  end
+
+  post "/messages/comment/:id" do
+    @database_connection.sql("INSERT INTO comments (message_id, comments) VALUES (#{params[:id]}, '#{params[:comment]}' )")
+    redirect "/"
   end
 
 end

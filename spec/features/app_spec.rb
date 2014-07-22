@@ -29,7 +29,17 @@ feature "Messages" do
     fill_in "Message", :with => "Testing testing"
     click_button "Submit"
     expect(page).to have_content("Testing testing")
-    click_link "Delete"
+    click_button "Delete"
     expect(page).to have_no_content("Testing testing")
+  end
+
+  scenario "As a user, I can add comment to a message" do
+    visit "/"
+    fill_in "Message", :with => "Testing testing"
+    click_button "Submit"
+    expect(page).to have_content("Testing testing")
+    fill_in "comment", :with => "Good job!"
+    click_button "Add Comment"
+    expect(page).to have_content("Good job!")
   end
 end
