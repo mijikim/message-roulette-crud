@@ -7,8 +7,20 @@
 <% messages.each do |message| %>
 
   <li><a href="/messages/view/<%= message["id"] %>"><%= message["message"] %></a>
+    <%= if message["likes"] == nil
+  message["likes"] = 0
+          else message["likes"]
+  end %> Likes
 
-    <a href="/messages/edit/<%= message["id"] %>">Edit</a>
+    <a href="/messages/likes/<%= message["id"] %>">Edit</a>
+    <form method="post" action="/messages/likes/<%= message["id"] %>">
+      <input type="hidden" name="_method" value="patch" />
+      <button>Like</button>
+    </form>
+    <form method="post" action="/messages/unlikes/<%= message["id"] %>">
+      <input type="hidden" name="_method" value="patch" />
+      <button>Unlike</button>
+    </form>
 
     <form method="post" action="/messages/delete/<%= message["id"] %>">
       <input type="hidden" name="_method" value="delete"/>

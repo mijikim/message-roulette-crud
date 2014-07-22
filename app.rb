@@ -61,4 +61,28 @@ class App < Sinatra::Application
     erb :messages, :locals => {:messages => messages, :comments => comments, :msg_id => params[:id]}
   end
 
+  patch "/messages/likes/:id" do
+    likes = @database_connection.sql("SELECT likes from messages where id=#{params[:id]}")
+    likes_num = 1
+    if likes[0]["likes"] == nil
+      likes_num
+    else
+      likes_num = likes[0]["likes"].to_i + 1
+    end
+    @database_connection.sql("update messages set likes = #{likes_num} where id=#{params[:id]}")
+  redirect back
+  end
+
+  patch "/messages/unlikes/:id" do
+    likes = @database_connection.sql("SELECT likes from messages where id=#{params[:id]}")
+    likes_num = 0
+    if likes[0]["likes"] == nil || likes[0]["likes"] == "0"
+      likes_num
+    else
+      likes_num = likes[0]["likes"].to_i - 1
+    end
+    @database_connection.sql("update messages set likes = #{likes_num} where id=#{params[:id]}")
+    redirect back
+  end
+
 end
