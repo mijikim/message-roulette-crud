@@ -14,7 +14,7 @@ class App < Sinatra::Application
 
   get "/" do
     messages = @database_connection.sql("SELECT * FROM messages")
-    comments = @database_connection.sql("SELECT * FROM comments INNER JOIN messages ON comments.message_id = messages.id")
+    comments = @database_connection.sql("SELECT * FROM comments")
 
     erb :home, locals: {messages: messages, comments: comments}
   end
@@ -53,6 +53,12 @@ class App < Sinatra::Application
   post "/messages/comment/:id" do
     @database_connection.sql("INSERT INTO comments (message_id, comments) VALUES (#{params[:id]}, '#{params[:comment]}' )")
     redirect "/"
+  end
+
+  get "/messages/view/:id" do
+    messages = @database_connection.sql("SELECT * FROM messages")
+    comments = @database_connection.sql("SELECT * FROM comments")
+    erb :messages, :locals => {:messages => messages, :comments => comments, :msg_id => params[:id]}
   end
 
 end
