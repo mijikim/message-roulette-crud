@@ -8,7 +8,12 @@
 
   <li><%= message["message"] %>
 
-   <a href="/messages/edit/<%= message["id"] %>">Edit</a></li>
+   <a href="/messages/edit/<%= message["id"] %>">Edit</a>
+  <form method="post" action="/messages/delete/<%= message["id"] %>">
+    <input type="hidden" name="_method" value="delete" />
+    <button>Delete</button>
+  </form>
+  </li>
 
 <% end %>
 

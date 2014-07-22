@@ -24,7 +24,6 @@ feature "Edit Message" do
     click_link "Edit"
     fill_in 'message_edited', :with => "Yo" * 140
     click_button "Edit Message"
-    save_and_open_page
     expect(page).to have_content("Message must be less than 140 characters.")
 
   end

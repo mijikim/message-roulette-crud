@@ -42,7 +42,11 @@ class App < Sinatra::Application
       flash[:error] = "Message must be less than 140 characters."
       redirect "/messages/edit/#{params[:id]}"
     end
+  end
 
+  delete "/messages/delete/:id" do
+    @database_connection.sql("DELETE FROM messages where id = #{params[:id]}")
+    redirect back
   end
 
 end
